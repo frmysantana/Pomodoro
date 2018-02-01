@@ -36,8 +36,17 @@ output {
     width: 50%;
 }
 
-output + button {
-    margin: 0 45%;
+#stop {
+    float: left;
+    margin-left: 5%;
+    margin-right: 35%;
+    width: 10%;
+}
+
+#start {
+    float: left;
+    margin-left: 35%;
+    margin-right: 5%;
     width: 10%;
 }
 
