@@ -1,0 +1,47 @@
+#adjust-break {
+    border: 1px solid black;
+    float: left;
+    height: 6vw;
+    width: 14%;
+}
+
+#adjust-session {
+    border: 1px solid black;
+    float: left;
+    height: 6vw;
+    width: 14%;
+}
+
+#display {
+    border: 1px solid black;
+    float: left;
+    height: 6vw;
+    width: 69%;
+}
+
+h1 {
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+}
+
+label {
+  margin-right: 10%;
+}
+
+output {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 50%;
+}
+
+output + button {
+    margin: 0 45%;
+    width: 10%;
+}
+
+#timer {
+    margin: 10vw auto;
+    width: 60%;
+}
