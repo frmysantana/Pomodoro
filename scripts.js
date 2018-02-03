@@ -10,6 +10,8 @@ var subBreakSec = document.querySelector('#break-dec-sec');
 
 var sessionTime = document.querySelector('#session');
 var breakTime = document.querySelector('#break');
+var sessionDisplay = document.querySelector('#session-display');
+var breakDisplay = document.querySelector('#break-display');
 
 var start = document.querySelector('#start');
 var stop = document.querySelector('#stop');
@@ -122,34 +124,30 @@ start.addEventListener('click', function() {
 
     if (!timer.countDown) {
         timer.active = sessionTime;
-        timer.countDown = setInterval(stopWatch, 1000);
-        addSessMin.disabled = true;
-        subSessMin.disabled = true;
-        addSessSec.disabled = true;
-        subSessSec.disabled = true;
 
-        addBreakMin.disabled = true;
-        subBreakMin.disabled = true;
-        addBreakSec.disabled = true;
-        subBreakSec.disabled = true;
+        timer.countDown = setInterval(stopWatch, 1000);
+        breakDisplay.classList.add('hide');
+        addSessMin.disabled = true; subSessMin.disabled = true; 
+        addSessSec.disabled = true; subSessSec.disabled = true;
+
+        addBreakMin.disabled = true; subBreakMin.disabled = true;
+        addBreakSec.disabled = true; subBreakSec.disabled = true;
     }
 });
 
 stop.addEventListener('click', function() {
     clearInterval(timer.countDown);
     delete timer.countDown;
-    addSessMin.disabled = false;
-    subSessMin.disabled = false;
-    addSessSec.disabled = false;
-    subSessSec.disabled = false;
+    addSessMin.disabled = false; subSessMin.disabled = false;
+    addSessSec.disabled = false; subSessSec.disabled = false;
 
-    addBreakMin.disabled = false;
-    subBreakMin.disabled = false;
-    addBreakSec.disabled = false;
-    subBreakSec.disabled = false;
+    addBreakMin.disabled = false; subBreakMin.disabled = false;
+    addBreakSec.disabled = false; subBreakSec.disabled = false;
 
     sessionTime.innerText = timer.defaultSess;
     breakTime.innerText = timer.defaultBreak;
+    sessionDisplay.classList.remove('hide');
+    breakDisplay.classList.remove('hide');
 });
 
 function stopWatch() {
@@ -166,9 +164,15 @@ function stopWatch() {
     } else {
         if (timer.active === sessionTime) {
             alert('Session is over! Beginning the break.');
+            sessionDisplay.classList.add('hide');
+            breakDisplay.classList.remove('hide');
+            sessionTime.innerText = timer.defaultSess;
             timer.active = breakTime;
         } else {
             alert('Break is over! Beginning the next session.');
+            sessionDisplay.classList.toggle('hide');
+            breakDisplay.classList.toggle('hide');
+            breakTime.innerText = timer.defaultBreak; 
             timer.active = sessionTime;
         }
     }
