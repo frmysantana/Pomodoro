@@ -12,16 +12,18 @@
             <!--Increase session time-->
             <div id="adjust-session">
                 <label for="session">Adjust Session</label>
-                <button name="session" id="session-inc">+</button>
-                <button name="session" id="session-dec">-</button>
+                <button name="session" id="session-inc-min">+</button>
+                <button name="session" id="session-dec-min">-</button>
+                <button name="session" id="session-inc-sec">+</button>
+                <button name="session" id="session-dec-sec">-</button>
             </div>
 
             <div id="display">
                 <h1>Pomodoro Timer</h1>
                 <!--Session time-->
-                <output id="session">25:00</output>
+                <output id="session">0:05</output>
                 <!--Break time-->
-                <output id="break">5:00</output>
+                <output id="break">0:05</output>
                 <!--Start session-->
                 <button id="start">Start</button>
                 <button id="stop">Stop</button>
@@ -30,8 +32,10 @@
             <!--Increase break time-->
             <div id="adjust-break">
                 <label for="break">Adjust Break</label>
-                <button name="break" id="break-inc">+</button>
-                <button name="break" id="break-dec">-</button>
+                <button name="break" id="break-inc-min">+</button>
+                <button name="break" id="break-dec-min">-</button>
+                <button name="break" id="break-inc-sec">+</button>
+                <button name="break" id="break-dec-sec">-</button>
             </div>
         </div>
         <script type="text/javascript" src="scripts.js"></script>
