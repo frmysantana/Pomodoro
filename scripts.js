@@ -1,7 +1,12 @@
-var addSessTime = document.querySelector('#session-inc');
-var subSessTime = document.querySelector('#session-dec');
-var addBreakTime = document.querySelector('#break-inc');
-var subBreakTime = document.querySelector('#break-dec');
+var addSessMin = document.querySelector('#session-inc-min');
+var subSessMin = document.querySelector('#session-dec-min');
+var addSessSec = document.querySelector('#session-inc-sec');
+var subSessSec = document.querySelector('#session-dec-sec');
+
+var addBreakMin = document.querySelector('#break-inc-min');
+var subBreakMin = document.querySelector('#break-dec-min');
+var addBreakSec = document.querySelector('#break-inc-sec');
+var subBreakSec = document.querySelector('#break-dec-sec');
 
 var sessionTime = document.querySelector('#session');
 var breakTime = document.querySelector('#break');
@@ -9,18 +14,20 @@ var breakTime = document.querySelector('#break');
 var start = document.querySelector('#start');
 var stop = document.querySelector('#stop');
 
-addSessTime.addEventListener('click', function() {
+var timer = {};
+
+addSessMin.addEventListener('click', function() {
     var min = sessionTime.innerText.split(':')[0];
     var sec = sessionTime.innerText.split(':')[1];
     if (min < 60) {
         min = parseInt(min, 10) + 1;
         sessionTime.innerText = min + ':' + sec;
     } else {
-        alert('1 hour is the maximum.')
+        alert('60:59 is the maximum.')
     }
 });
 
-subSessTime.addEventListener('click', function() {
+subSessMin.addEventListener('click', function() {
     var min = sessionTime.innerText.split(':')[0];
     var sec = sessionTime.innerText.split(':')[1];
     if (min > 1) {
@@ -31,7 +38,35 @@ subSessTime.addEventListener('click', function() {
     }
 });
 
-addBreakTime.addEventListener('click', function() {
+addSessSec.addEventListener('click', function() {
+    var min = sessionTime.innerText.split(':')[0];
+    var sec = sessionTime.innerText.split(':')[1];
+    if (min < 60) {
+        sec = parseInt(sec, 10) + 1;
+        if (sec === 60) {
+            sec = 0; min = parseInt(min) + 1;
+        }
+        sessionTime.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    } else {
+        alert('60:59 is the maximum.')
+    }
+});
+
+subSessSec.addEventListener('click', function() {
+    var min = sessionTime.innerText.split(':')[0];
+    var sec = sessionTime.innerText.split(':')[1];
+    if (min > 1) {
+       sec = parseInt(sec, 10) - 1;
+       if (sec === -1) {
+           sec = 59; min = parseInt(min) - 1;
+       }
+       sessionTime.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    } else {
+        alert('1 minute is the minimum.');
+    }
+});
+
+addBreakMin.addEventListener('click', function() {
     var min = breakTime.innerText.split(':')[0];
     var sec = breakTime.innerText.split(':')[1];
     if (min < 30) {
@@ -42,7 +77,7 @@ addBreakTime.addEventListener('click', function() {
     }
 });
 
-subBreakTime.addEventListener('click', function() {
+subBreakMin.addEventListener('click', function() {
     var min = breakTime.innerText.split(':')[0];
     var sec = breakTime.innerText.split(':')[1];
     if (min > 1) {
@@ -53,16 +88,88 @@ subBreakTime.addEventListener('click', function() {
     }
 });
 
-start.addEventListener('click', function() {
-    var countDown = setInterval(stopWatch, 1000);
+addBreakSec.addEventListener('click', function() {
+    var min = breakTime.innerText.split(':')[0];
+    var sec = breakTime.innerText.split(':')[1];
+    if (min < 30) {
+        sec = parseInt(sec, 10) + 1;
+        if (sec === 60) {
+            sec = 0; min = parseInt(min) + 1;
+        }
+        breakTime.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    } else {
+        alert('30:59 is the maximum.')
+    }
 });
 
-// Doesn't work
+subBreakSec.addEventListener('click', function() {
+    var min = breakTime.innerText.split(':')[0];
+    var sec = breakTime.innerText.split(':')[1];
+    if (min > 1) {
+       sec = parseInt(sec, 10) - 1;
+       if (sec === -1) {
+           sec = 59; min = parseInt(min) - 1;
+       }
+       breakTime.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    } else {
+        alert('1 minute is the minimum.');
+    }
+});
+
+start.addEventListener('click', function() {
+    timer.defaultSess = sessionTime.innerText;
+    timer.defaultBreak = breakTime.innerText;
+
+    if (!timer.countDown) {
+        timer.active = sessionTime;
+        timer.countDown = setInterval(stopWatch, 1000);
+        addSessMin.disabled = true;
+        subSessMin.disabled = true;
+        addSessSec.disabled = true;
+        subSessSec.disabled = true;
+
+        addBreakMin.disabled = true;
+        subBreakMin.disabled = true;
+        addBreakSec.disabled = true;
+        subBreakSec.disabled = true;
+    }
+});
+
 stop.addEventListener('click', function() {
-    clearInterval(countDown);
+    clearInterval(timer.countDown);
+    delete timer.countDown;
+    addSessMin.disabled = false;
+    subSessMin.disabled = false;
+    addSessSec.disabled = false;
+    subSessSec.disabled = false;
+
+    addBreakMin.disabled = false;
+    subBreakMin.disabled = false;
+    addBreakSec.disabled = false;
+    subBreakSec.disabled = false;
+
+    sessionTime.innerText = timer.defaultSess;
+    breakTime.innerText = timer.defaultBreak;
 });
 
 function stopWatch() {
-    var time = Number(sessionTime.innerText);
-    sessionTime.innerText = time - .01;
+    var type = timer.active;
+    var min = parseInt(type.innerText.split(':')[0]);
+    var sec = parseInt(type.innerText.split(':')[1]);
+    if (min > 0 && sec === 0) {
+        min = min - 1;
+        sec = 59;
+        type.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    }  else if (sec > 0) {
+        sec = sec - 1;
+        type.innerText = min + ':' + ((sec < 10) ? '0' + sec: sec);
+    } else {
+        if (timer.active === sessionTime) {
+            alert('Session is over! Beginning the break.');
+            timer.active = breakTime;
+        } else {
+            alert('Break is over! Beginning the next session.');
+            timer.active = sessionTime;
+        }
+    }
 }
