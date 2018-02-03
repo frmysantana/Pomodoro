@@ -1,22 +1,29 @@
 #adjust-break {
-    border: 1px solid black;
+    color: white;
+    background-color: black;
     float: left;
-    height: 6vw;
+    height: 8vw;
     width: 14%;
 }
 
 #adjust-session {
-    border: 1px solid black;
+    color: white;
+    background-color: black;
     float: left;
-    height: 6vw;
+    height: 8vw;
     width: 14%;
 }
 
 #display {
-    border: 1px solid black;
+    color: white;
+    background-color: black;
     float: left;
-    height: 6vw;
+    height: 8vw;
     width: 69%;
+}
+
+.hide {
+    display: none;
 }
 
 h1 {
@@ -30,8 +37,9 @@ label {
 }
 
 output {
+    color: green;
     display: block;
-    float: left;
+    float: right;
     text-align: center;
     width: 50%;
 }
@@ -51,6 +59,7 @@ output {
 }
 
 #timer {
+    border-radius: 10px;
     margin: 10vw auto;
     width: 60%;
 }
