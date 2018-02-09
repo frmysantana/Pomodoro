@@ -3,6 +3,8 @@ class PomodoroClock extends React.Component {
     super(props);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleSub = this.handleSub.bind(this);
+    this.changeSelected = this.changeSelected.bind(this);
+    this.changeUnit = this.changeUnit.bind(this);
     this.state = {
       selected: props.selected,
       unit: props.unit,
@@ -12,25 +14,105 @@ class PomodoroClock extends React.Component {
   }
   
   handleAdd() {
-    let min = this.state.sessionLength.split(':')[0];
-    const sec = this.state.sessionLength.split(':')[1];
-    min = parseInt(min) + 1;
-    this.setState(() => ({sessionLength: min + ':' + sec}));
+    let min, sec, sel = this.state.selected;
+    
+    if (sel === 'session') {
+      min = this.state.sessionLength.split(':')[0];
+      sec = this.state.sessionLength.split(':')[1];
+      
+      if (this.state.unit === "min") {
+        min = parseInt(min) + 1;
+      } else {
+        if (parseInt(sec) === 59) {
+          sec = 0;
+          min = parseInt(min) + 1;
+        } else {
+          sec = parseInt(sec) + 1; 
+        }
+        
+        sec = (sec < 10) ? '0' + sec : sec;
+      }
+    
+      this.setState(() => ({sessionLength: min + ':' + sec}));
+    } else {
+      min = this.state.breakLength.split(':')[0];
+      sec = this.state.breakLength.split(':')[1];
+      
+      if (this.state.unit === "min") {
+        min = parseInt(min) + 1;
+      } else {
+        if (parseInt(sec) === 59) {
+          sec = 0;
+          min = parseInt(min) + 1;
+        } else {
+          sec = parseInt(sec) + 1; 
+        }
+        
+        sec = (sec < 10) ? '0' + sec : sec;
+      }
+    
+      this.setState(() => ({breakLength: min + ':' + sec}));
+    }
   }
   
   handleSub() {
-    let min = this.state.sessionLength.split(':')[0];
-    const sec = this.state.sessionLength.split(':')[1];
-    min = parseInt(min) - 1;
-    this.setState(()=> ({ sessionLength: min + ':' + sec}));
+    let min, sec, sel = this.state.selected;
+    
+    if (sel === 'session') {
+      min = this.state.sessionLength.split(':')[0];
+      sec = this.state.sessionLength.split(':')[1];
+      
+      if (this.state.unit === "min") {
+        min = parseInt(min) - 1;
+      } else {
+        if (parseInt(sec) === 0) {
+          sec = 59;
+          min = parseInt(min) - 1;
+        } else {
+          sec = parseInt(sec) - 1; 
+        }
+        
+        sec = (sec < 10) ? '0' + sec : sec;
+      }
+    
+      this.setState(() => ({sessionLength: min + ':' + sec}));
+    } else {
+      min = this.state.breakLength.split(':')[0];
+      sec = this.state.breakLength.split(':')[1];
+      
+      if (this.state.unit === "min") {
+        min = parseInt(min) - 1;
+      } else {
+        if (parseInt(sec) === 0) {
+          sec = 59;
+          min = parseInt(min) - 1;
+        } else {
+          sec = parseInt(sec) - 1; 
+        }
+        
+        sec = (sec < 10) ? '0' + sec : sec;
+      }
+    
+      this.setState(() => ({breakLength: min + ':' + sec}));
+    }
   }
   
   changeSelected(newSel) {
-    this.setState(()=> ({ selected: newSel }));
+    this.setState(() => ({ selected: newSel }));
   }
   
-  componentDidUpdate(prevProps, prevState) {
-    console.log(this.state);
+  changeUnit(newUnit) {
+    this.setState(() => ({ unit: newUnit}));
+  }
+  
+  handleStart() {
+    this.setState(() => (
+      
+    ));
+  }
+  
+  handleStop() {
+    
   }
   
   render() {
@@ -39,12 +121,15 @@ class PomodoroClock extends React.Component {
           <Options 
             changeSelected = {this.changeSelected}
           />
-          <Display 
+          <Display
             sessionLength = {this.state.sessionLength}
             breakLength = {this.state.breakLength}
+            handleStart = {this.state.handleStart}
+            handleStop = {this.state.handleStop}
           />
           <Adjust
             unit = {this.state.unit}
+            changeUnit = {this.changeUnit}
             handleAdd = {this.handleAdd}
             handleSub = {this.handleSub}
           />
@@ -68,7 +153,6 @@ class Options extends React.Component {
   }
   
   changeSelected(e) {
-    console.log(e.target.id);
     this.props.changeSelected(e.target.id);
   }
   
@@ -77,7 +161,7 @@ class Options extends React.Component {
       <div>
         <label for="session">Session Length</label>
         <input 
-          type="radio" name="portion" checked  
+          type="radio" name="portion"
           id="session" onClick={this.changeSelected}
         />
         
@@ -96,8 +180,8 @@ const Display = (props) => {
       <h2>Pomodoro Timer</h2>
       <p>Session Length: {props.sessionLength}</p>
       <p>Break Length: {props.breakLength}</p>
-      <button>Start</button>
-      <button>Stop</button>
+      <button onClick={this.props.handleStart}>Start</button>
+      <button onClick={this.props.handleStop}>Stop</button>
     </div>
   );
 }
@@ -105,17 +189,26 @@ const Display = (props) => {
 class Adjust extends React.Component {
   constructor() {
     super();
+    this.changeUnit = this.changeUnit.bind(this);
     this.state={};
+  }
+  
+  changeUnit(e) {
+    this.props.changeUnit(e.target.id);
   }
   
   render() {
     return (
       <div>
         <label for="minutes">Minutes</label>
-        <input type="radio" name="unit" checked/>
+        <input type="radio" name="unit"
+          id="min" onClick = {this.changeUnit}
+        />
       
         <label for="seconds">Seconds</label>
-        <input type="radio" name="unit" />
+        <input type="radio" name="unit" 
+          id="sec" onClick = {this.changeUnit}
+        />
         
         <button onClick={this.props.handleAdd}>+</button>
         <button onClick={this.props.handleSub}>-</button>
