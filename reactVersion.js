@@ -1,10 +1,12 @@
 class PomodoroClock extends React.Component {
   constructor(props) {
     super(props);
+    this.timer = timer;
     this.handleAdd = this.handleAdd.bind(this);
     this.handleSub = this.handleSub.bind(this);
     this.changeSelected = this.changeSelected.bind(this);
     this.changeUnit = this.changeUnit.bind(this);
+    this.startTimer = this.startTimer.bind(this);
     this.state = {
       selected: props.selected,
       unit: props.unit,
@@ -105,15 +107,13 @@ class PomodoroClock extends React.Component {
     this.setState(() => ({ unit: newUnit}));
   }
   
-  handleStart() {
-    this.setState(() => (
-      
-    ));
-  }
-  
-  handleStop() {
+  startTimer() {
     
   }
+  
+//   handleStop() {
+    
+//   }
   
   render() {
     return(
@@ -124,8 +124,7 @@ class PomodoroClock extends React.Component {
           <Display
             sessionLength = {this.state.sessionLength}
             breakLength = {this.state.breakLength}
-            handleStart = {this.state.handleStart}
-            handleStop = {this.state.handleStop}
+            startTimer = {this.startTimer}
           />
           <Adjust
             unit = {this.state.unit}
@@ -142,7 +141,8 @@ PomodoroClock.defaultProps = {
   selected: 'session',
   unit: 'min',
   sessionLength: "25:00",
-  breakLength: "5:00"
+  breakLength: "5:00",
+  countDown: null
 };
 
 class Options extends React.Component {
@@ -180,8 +180,8 @@ const Display = (props) => {
       <h2>Pomodoro Timer</h2>
       <p>Session Length: {props.sessionLength}</p>
       <p>Break Length: {props.breakLength}</p>
-      <button onClick={this.props.handleStart}>Start</button>
-      <button onClick={this.props.handleStop}>Stop</button>
+      <button onClick={props.startTimer}>Start</button>
+      <button>Stop</button>
     </div>
   );
 }
