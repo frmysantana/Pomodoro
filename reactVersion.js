@@ -1,12 +1,13 @@
 class PomodoroClock extends React.Component {
   constructor(props) {
     super(props);
-    this.timer = timer;
+    this.timer = {};
     this.handleAdd = this.handleAdd.bind(this);
     this.handleSub = this.handleSub.bind(this);
     this.changeSelected = this.changeSelected.bind(this);
     this.changeUnit = this.changeUnit.bind(this);
     this.startTimer = this.startTimer.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
     this.state = {
       selected: props.selected,
       unit: props.unit,
@@ -78,6 +79,16 @@ class PomodoroClock extends React.Component {
       }
     
       this.setState(() => ({sessionLength: min + ':' + sec}));
+      
+      if (this.timer.countDown && this.state.sessionLength === '0:00') {
+        document.querySelectorAll('p')[0].style.display = 'none';
+        document.querySelectorAll('p')[1].style.display = 'block';
+        this.setState(() => ({
+          selected: 'break',
+          sessionLength: this.timer.defaultSession
+        }));
+        alert('Session is over! Take a break.');
+      }
     } else {
       min = this.state.breakLength.split(':')[0];
       sec = this.state.breakLength.split(':')[1];
@@ -96,6 +107,16 @@ class PomodoroClock extends React.Component {
       }
     
       this.setState(() => ({breakLength: min + ':' + sec}));
+      
+      if (this.timer.countDown && this.state.breakLength === '0:00') {
+        document.querySelectorAll('p')[0].style.display = 'block';
+        document.querySelectorAll('p')[1].style.display = 'none';
+        this.setState(() => ({
+          selected: 'session',
+          breakLength: this.timer.defaultBreak
+        }));
+        alert('Break is over! Starting next session.');
+      }
     }
   }
   
@@ -108,12 +129,44 @@ class PomodoroClock extends React.Component {
   }
   
   startTimer() {
+    if (!this.timer.countDown) {
+      this.timer.defaultSession = this.state.sessionLength;
+      this.timer.defaultBreak = this.state.breakLength;
+      this.state.selected = 'session', this.state.unit = 'sec';
+      this.timer.countDown = setInterval(this.handleSub, 1000);
     
+      document.querySelectorAll("input[type='radio']").forEach(function(el) {
+        el.disabled = true;
+      });
+      
+      document.querySelectorAll(".js-adjust-time").forEach(function(el) {
+        el.disabled = true;
+      });
+      document.querySelectorAll('p')[1].style.display = 'none';
+    }
   }
   
-//   handleStop() {
+  stopTimer() {
+    clearInterval(this.timer.countDown);
+    delete this.timer.countDown;
     
-//   }
+    document.querySelectorAll("input[type='radio']").forEach(function(el) {
+      el.disabled = false;
+    });
+      
+    document.querySelectorAll(".js-adjust-time").forEach(function(el) {
+      el.disabled = false;
+    });
+    
+    document.querySelectorAll('p').forEach(function(el) {
+      el.style.display = 'block';
+    });
+    
+    this.setState(() => ({
+      sessionLength: this.timer.defaultSession,
+      breakLength: this.timer.defaultBreak
+    }));
+  }
   
   render() {
     return(
@@ -125,6 +178,7 @@ class PomodoroClock extends React.Component {
             sessionLength = {this.state.sessionLength}
             breakLength = {this.state.breakLength}
             startTimer = {this.startTimer}
+            stopTimer = {this.stopTimer}
           />
           <Adjust
             unit = {this.state.unit}
@@ -140,8 +194,8 @@ class PomodoroClock extends React.Component {
 PomodoroClock.defaultProps = {
   selected: 'session',
   unit: 'min',
-  sessionLength: "25:00",
-  breakLength: "5:00",
+  sessionLength: "0:05",
+  breakLength: "0:05",
   countDown: null
 };
 
@@ -181,7 +235,7 @@ const Display = (props) => {
       <p>Session Length: {props.sessionLength}</p>
       <p>Break Length: {props.breakLength}</p>
       <button onClick={props.startTimer}>Start</button>
-      <button>Stop</button>
+      <button onClick={props.stopTimer}>Stop</button>
     </div>
   );
 }
@@ -210,8 +264,8 @@ class Adjust extends React.Component {
           id="sec" onClick = {this.changeUnit}
         />
         
-        <button onClick={this.props.handleAdd}>+</button>
-        <button onClick={this.props.handleSub}>-</button>
+        <button onClick={this.props.handleAdd} className="js-adjust-time">+</button>
+        <button onClick={this.props.handleSub} className="js-adjust-time">-</button>
       </div>
     );
   }
