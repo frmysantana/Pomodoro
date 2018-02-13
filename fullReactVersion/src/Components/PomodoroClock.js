@@ -175,7 +175,7 @@ export default class PomodoroClock extends React.Component {
     
   render() {
     return (
-      <div>
+      <div id="Clock">
         <Options 
           changeSelected = {this.changeSelected}
         />
