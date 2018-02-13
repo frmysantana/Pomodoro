@@ -13,7 +13,7 @@ export default class Options extends React.Component {
     
     render() {
       return (
-        <div>
+        <div id="Options">
           <label htmlFor="session">Session Length</label>
           <input 
             type="radio" name="portion"
