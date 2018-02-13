@@ -1,0 +1,18 @@
+#Display {
+  background-color: $dark-gray-green;
+  color: $white-green;
+  float: left;
+  font-size: 15px;
+  height: $height;
+  width: 55%;
+
+  h2 {
+    margin: 5px;
+    font-size: 30px;
+  }
+
+  button {
+    background-color: $green;
+    color: black;
+  }
+}
