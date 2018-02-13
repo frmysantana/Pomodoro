@@ -13,7 +13,7 @@ export default class Adjust extends React.Component {
     
     render() {
       return (
-        <div>
+        <div id="Adjust">
           <label htmlFor="minutes">Minutes</label>
           <input type="radio" name="unit"
             id="min" onClick = {this.changeUnit}
