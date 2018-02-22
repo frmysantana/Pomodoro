@@ -6,4 +6,52 @@
     font-size: 15px;
     height: $height;
     width: 22%;
+
+    .choice {
+        margin: 20px auto;
+        width: 80%;
+        
+        input {
+          margin-left: 5px;
+        }
+
+        input[type="radio"]:checked {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+
+            background-color: $green;
+
+            &:disabled {
+                background-color: darken($green, 30%);
+            }
+        }
+    }
+
+    #buttons {
+        margin: 0 auto;
+        width: 60%;
+
+        button {
+            border-style: none;
+            background-color: $green;
+            width: 33%;
+
+            &:disabled {
+                background-color: darken($green, 30%);
+            }
+        }
+
+        #add {
+            margin-right: 5%;
+        }
+
+        #sub {
+            margin-left: 5%;
+        }
+    }
 }
