@@ -7,12 +7,58 @@
   width: 55%;
 
   h2 {
+    font-size: 25px;
     margin: 5px;
-    font-size: 30px;
+    text-align: center;
+  }
+  
+  p {
+    margin: 10px auto;
+    padding-left: 2%;
+    padding-right: 2%;
+    width: 90%;
+
+    span {
+      float: right;
+    }
   }
 
-  button {
-    background-color: $green;
-    color: black;
+  div {
+    margin: 12px auto;
+    width: 60%;
+
+    button {
+      background-color: $green;
+      border-style: none;
+      color: black;
+      text-align: center;
+      width: 40%;
+    }
+
+    button:nth-of-type(2) {
+      float: right;
+    }
+  }
+
+  .selected {
+    background-color: $selected-gray-green;
+
+    span {
+      color: $green;
+    }
+  }
+
+  .unselected {
+    color: $unselected-white-green;
+  }
+
+  .active {
+    display: block;
+    margin-top: 27px;
+    margin-bottom: 22px;
+  }
+
+  .hide {
+    display: none;
   }
 }
