@@ -11,21 +11,31 @@ export default class Adjust extends React.Component {
       this.props.changeUnit(e.target.id);
     }
     
+    componentDidMount() {
+      document.querySelector('#min').checked = true;
+    }
+
     render() {
       return (
         <div id="Adjust">
-          <label htmlFor="minutes">Minutes</label>
-          <input type="radio" name="unit"
-            id="min" onClick = {this.changeUnit}
-          />
-        
-          <label htmlFor="seconds">Seconds</label>
-          <input type="radio" name="unit" 
-            id="sec" onClick = {this.changeUnit}
-          />
+          <div className="choice">
+            <label htmlFor="minutes">Minutes</label>
+            <input type="radio" name="unit"
+              id="min" onClick = {this.changeUnit}
+            />
+          </div>
+
+          <div className="choice">
+            <label htmlFor="seconds">Seconds</label>
+            <input type="radio" name="unit" 
+              id="sec" onClick = {this.changeUnit}
+            />
+          </div>
           
-          <button onClick={this.props.handleAdd} className="js-adjust-time">+</button>
-          <button onClick={this.props.handleSub} className="js-adjust-time">-</button>
+          <div id="buttons">
+            <button onClick={this.props.handleAdd} className="js-adjust-time" id="add">+</button>
+            <button onClick={this.props.handleSub} className="js-adjust-time" id="sub">-</button>
+          </div>
         </div>
       );
     }
