@@ -17,6 +17,7 @@
     "babel-preset-env": "^1.5.2",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.4",
+    "howler": "^2.0.9",
     "node-sass": "^4.5.3",
     "normalize.css": "^7.0.0",
     "react": "^16.0.0",
