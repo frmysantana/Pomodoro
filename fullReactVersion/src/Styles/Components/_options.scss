@@ -7,8 +7,52 @@
     height: $height;
     width: 22%;
 
-    label {
-        margin-left: 10%;
-        margin-right: 2%;
+    div:nth-of-type(1) {
+        float: right;
+        margin-top: 25px;
+        margin-bottom: 22px;
+        padding-right: 10px;
+        
+        label {
+            position: relative;
+            right: 18px;
+        }
+        input {
+            position: relative;
+            bottom: 5px;
+        }
+    }
+
+    div:nth-of-type(2) {
+        float: right;
+        margin-top: 22px;
+        padding-right: 10px;
+
+        label {
+            position: relative;
+            right: 18px;
+            bottom: 20px
+        }
+
+        input {
+            position: relative;
+            bottom: 26px;
+        }
+    }
+
+    input[type="radio"]:checked {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+
+        background-color: $green;
+
+        &:disabled {
+            background-color: darken($green, 30%);
+        }
     }
 }
