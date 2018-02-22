@@ -1,4 +1,5 @@
 import React from 'react';
+import {Howl, Howler} from 'howler';
 import Options from './Options.js';
 import Display from './Display.js';
 import Adjust from './Adjust.js';
@@ -25,38 +26,50 @@ export default class PomodoroClock extends React.Component {
     let min, sec, sel = this.state.selected;
     
     if (sel === 'session') {
-      min = this.state.sessionLength.split(':')[0];
-      sec = this.state.sessionLength.split(':')[1];
+      min = parseInt(this.state.sessionLength.split(':')[0]);
+      sec = parseInt(this.state.sessionLength.split(':')[1]);
       
       if (this.state.unit === "min") {
-        min = parseInt(min) + 1;
-      } else {
-        if (parseInt(sec) === 59) {
-          sec = 0;
-          min = parseInt(min) + 1;
+        if (min < 59) {
+          min = min + 1;
         } else {
-          sec = parseInt(sec) + 1; 
+          alert('The maximum session time is 59:59.');
         }
-        
-        sec = (sec < 10) ? '0' + sec : sec;
+      } else {
+        if (sec === 59 && min < 59) {
+          sec = 0;
+          min = min + 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else if (min + (sec/100) < 59.59) {
+          sec = sec + 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else {
+          alert('The maximum session time is 59:59.');
+        }
       }
     
       this.setState(() => ({sessionLength: min + ':' + sec}));
     } else {
-      min = this.state.breakLength.split(':')[0];
-      sec = this.state.breakLength.split(':')[1];
+      min = parseInt(this.state.breakLength.split(':')[0]);
+      sec = parseInt(this.state.breakLength.split(':')[1]);
       
       if (this.state.unit === "min") {
-        min = parseInt(min) + 1;
-      } else {
-        if (parseInt(sec) === 59) {
-          sec = 0;
-          min = parseInt(min) + 1;
+        if (min < 29) {
+          min = min + 1;
         } else {
-          sec = parseInt(sec) + 1; 
+          alert('The maximum break time is 29:59.');
         }
-        
-        sec = (sec < 10) ? '0' + sec : sec;
+      } else {
+        if (sec === 59 && min < 29) {
+          sec = 0;
+          min = min + 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else if (min + (sec/100) < 29.59) {
+          sec = sec + 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else {
+          alert('The maximum break time is 29:59')
+        }
       }
     
       this.setState(() => ({breakLength: min + ':' + sec}));
@@ -67,60 +80,97 @@ export default class PomodoroClock extends React.Component {
     let min, sec, sel = this.state.selected;
     
     if (sel === 'session') {
-      min = this.state.sessionLength.split(':')[0];
-      sec = this.state.sessionLength.split(':')[1];
+      min = parseInt(this.state.sessionLength.split(':')[0]);
+      sec = parseInt(this.state.sessionLength.split(':')[1]);
       
       if (this.state.unit === "min") {
-        min = parseInt(min) - 1;
-      } else {
-        if (parseInt(sec) === 0) {
-          sec = 59;
-          min = parseInt(min) - 1;
+        if (min > 0) {
+          min = min - 1;
         } else {
-          sec = parseInt(sec) - 1; 
+          alert('The minimum session time is 5:00.');
         }
-        
-        sec = (sec < 10) ? '0' + sec : sec;
+      } else {
+        if (sec === 0 && min > 0) {
+          sec = 59;
+          min = min - 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else if (min + (sec/100) > 0.00) {
+          sec = sec - 1;
+          sec = (sec < 10) ? '0' + sec : sec; 
+        } else {
+          alert('The minimum session time is 5:00.');
+          sec = (sec === 0) ? '0' + sec: sec;
+        }
       }
     
       this.setState(() => ({sessionLength: min + ':' + sec}));
       
-      if (this.timer.countDown && this.state.sessionLength === '0:00') {
-        document.querySelectorAll('p')[0].style.display = 'none';
-        document.querySelectorAll('p')[1].style.display = 'block';
+      if (this.timer.countDown && document.querySelectorAll('span')[0].innerHTML === '0:00') {
+        document.querySelectorAll('p')[0].classList.add('hide');
+        document.querySelectorAll('p')[0].classList.remove('active');
+
+        document.querySelectorAll('p')[1].classList.add('active');
+        document.querySelectorAll('p')[1].classList.remove('hide');
+
         this.setState(() => ({
           selected: 'break',
           sessionLength: this.timer.defaultSession
         }));
-        alert('Session is over! Take a break.');
+
+        setTimeout(function() {
+          const sound = new Howl({
+            src: ['./assets/Alarm.mp3'],
+            onplay: function() {
+              alert('Session is over! Take a break.');
+            },
+          });
+          sound.play();
+          const alarm = sound.play();
+
+          sound.rate(4, alarm);
+        }, 1);
       }
     } else {
-      min = this.state.breakLength.split(':')[0];
-      sec = this.state.breakLength.split(':')[1];
+      min = parseInt(this.state.breakLength.split(':')[0]);
+      sec = parseInt(this.state.breakLength.split(':')[1]);
       
       if (this.state.unit === "min") {
-        min = parseInt(min) - 1;
-      } else {
-        if (parseInt(sec) === 0) {
-          sec = 59;
-          min = parseInt(min) - 1;
+        if (min > 0) {
+          min = min - 1;
         } else {
-          sec = parseInt(sec) - 1; 
+          alert('The minimum break time is 1:00.');
         }
-        
-        sec = (sec < 10) ? '0' + sec : sec;
+      } else {
+        if (sec === 0 && min > 0) {
+          sec = 59;
+          min = min - 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else if (min + (sec/100) > 0.00) {
+          sec = sec - 1;
+          sec = (sec < 10) ? '0' + sec : sec;
+        } else {
+          alert('The minimum break time is 1:00.');
+          sec = (sec === 0) ? '0' + sec : sec;
+        }
       }
     
       this.setState(() => ({breakLength: min + ':' + sec}));
       
-      if (this.timer.countDown && this.state.breakLength === '0:00') {
-        document.querySelectorAll('p')[0].style.display = 'block';
-        document.querySelectorAll('p')[1].style.display = 'none';
+      if (this.timer.countDown && document.querySelectorAll('span')[1].innerHTML === '0:00') {
+        document.querySelectorAll('p')[0].classList.remove('hide');
+        document.querySelectorAll('p')[0].classList.add('active');
+
+        document.querySelectorAll('p')[1].classList.add('hide');
+        document.querySelectorAll('p')[1].classList.remove('active');
+        
         this.setState(() => ({
           selected: 'session',
           breakLength: this.timer.defaultBreak
         }));
-        alert('Break is over! Starting next session.');
+
+        setTimeout(function() {
+          alert('Break is over! Starting next session.');
+        }, 1);
       }
     }
   }
@@ -147,7 +197,9 @@ export default class PomodoroClock extends React.Component {
       document.querySelectorAll(".js-adjust-time").forEach(function(el) {
         el.disabled = true;
       });
-      document.querySelectorAll('p')[1].style.display = 'none';
+
+      document.querySelectorAll('p')[0].classList.add('active');
+      document.querySelectorAll('p')[1].classList.add('hide');
     }
   }
     
@@ -164,12 +216,14 @@ export default class PomodoroClock extends React.Component {
     });
     
     document.querySelectorAll('p').forEach(function(el) {
-      el.style.display = 'block';
+      el.classList.remove('active');
+      el.classList.remove('hide');
     });
     
     this.setState(() => ({
-      sessionLength: this.timer.defaultSession,
-      breakLength: this.timer.defaultBreak
+      selected: 'session',
+      sessionLength: this.timer.defaultSession || this.props.sessionLength,
+      breakLength: this.timer.defaultBreak || this.props.breakLength
     }));
   }
     
@@ -180,6 +234,7 @@ export default class PomodoroClock extends React.Component {
           changeSelected = {this.changeSelected}
         />
         <Display
+          selected = {this.state.selected}
           sessionLength = {this.state.sessionLength}
           breakLength = {this.state.breakLength}
           startTimer = {this.startTimer}
@@ -199,7 +254,7 @@ export default class PomodoroClock extends React.Component {
 PomodoroClock.defaultProps = {
   selected: 'session',
   unit: 'min',
-  sessionLength: "25:00",
-  breakLength: "5:00",
+  sessionLength: "0:05",
+  breakLength: "0:05",
   countDown: null
 };
