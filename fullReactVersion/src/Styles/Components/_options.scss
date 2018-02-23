@@ -8,35 +8,30 @@
     width: 22%;
 
     div:nth-of-type(1) {
-        float: right;
         margin-top: 25px;
         margin-bottom: 22px;
-        padding-right: 10px;
-        
-        label {
-            position: relative;
-            right: 18px;
-        }
+        margin-right: auto;
+        margin-left: auto;
+        width: 75px;
+
         input {
+            margin-left: 20px;
             position: relative;
-            bottom: 5px;
+            bottom: 8px;
         }
     }
 
     div:nth-of-type(2) {
-        float: right;
         margin-top: 22px;
-        padding-right: 10px;
-
-        label {
-            position: relative;
-            right: 18px;
-            bottom: 20px
-        }
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 8px;
+        width: 60px;
 
         input {
+            margin-left: 10px;
             position: relative;
-            bottom: 26px;
+            bottom: 8px;
         }
     }
 
