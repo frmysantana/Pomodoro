@@ -119,15 +119,13 @@ export default class PomodoroClock extends React.Component {
 
         setTimeout(function() {
           const sound = new Howl({
-            src: ['./assets/Alarm.mp3'],
+            src: ['./assets/Alarm.mp3', './assets/Alarm.ogg'],
             onplay: function() {
               alert('Session is over! Take a break.');
+              this.stop();
             },
           });
           sound.play();
-          const alarm = sound.play();
-
-          sound.rate(4, alarm);
         }, 1);
       }
     } else {
@@ -169,7 +167,14 @@ export default class PomodoroClock extends React.Component {
         }));
 
         setTimeout(function() {
-          alert('Break is over! Starting next session.');
+          const sound = new Howl({
+            src: ['./assets/Alarm.mp3', './assets/Alarm.ogg'],
+            onplay: function() {
+              alert('Break is over! Starting next session.');
+              this.stop();
+            },
+          });
+          sound.play();
         }, 1);
       }
     }
