@@ -9,7 +9,7 @@
 
     .choice {
         margin: 20px auto;
-        width: 80%;
+        width: 68px;
         
         input {
           margin-left: 5px;
@@ -34,12 +34,12 @@
 
     #buttons {
         margin: 0 auto;
-        width: 60%;
+        width: 53px;
 
         button {
             border-style: none;
             background-color: $green;
-            width: 33%;
+            width: 21px;
 
             &:disabled {
                 background-color: darken($green, 30%);
@@ -47,11 +47,11 @@
         }
 
         #add {
-            margin-right: 5%;
+            margin-right: 5px;
         }
 
         #sub {
-            margin-left: 5%;
+            margin-left: 5px;
         }
     }
 }
