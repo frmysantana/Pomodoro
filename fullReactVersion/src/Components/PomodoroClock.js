@@ -7,7 +7,16 @@ import Adjust from './Adjust.js';
 export default class PomodoroClock extends React.Component {
   constructor(props) {
     super(props);
+    this.incOrDec = [
+      function(num) {return num + 1;},
+      function(num) {return num - 1;}
+    ];
+    this.lessOrGreat = [
+      function(var1, var2) {return var1 < var2;},
+      function(var1, var2) {return var1 > var2;}
+    ];  
     this.timer = {};
+    this.changeTime = this.changeTime.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleSub = this.handleSub.bind(this);
     this.changeSelected = this.changeSelected.bind(this);
@@ -21,13 +30,64 @@ export default class PomodoroClock extends React.Component {
       breakLength: props.breakLength
     };
   }
-    
+
+  changeTime(mode = 'sub', limType, lim1 = 0, lim2 = 0) {
+    let min, sec;
+    const sel = this.state.selected;
+    const timeLimit = (sel === 'session') ? lim1 : lim2;
+    const message = `The ${limType} ${sel} time is ${timeLimit}.`;
+    const timeLength = (sel === 'session') ? this.state.sessionLength :
+      this.state.breakLength;
+    const i = (mode === 'add') ? 0 : 1;
+
+    // console.log()
+    min = parseInt(timeLength.split(':')[0]);
+    sec = parseInt(timeLength.split(':')[1]);
+
+    // Changing minutes
+    if (this.state.unit === "min") {
+        // Enforcing time limit
+        if (this.lessOrGreat[i](min, Math.floor(timeLimit))) {
+            min = this.incOrDec[i](min);
+            sec = (sec < 10) ? '0' + sec : sec;
+        } 
+        else {alert(message); sec = (sec < 10) ? '0' + sec : sec;}
+    } 
+    // Changing seconds
+    else {
+        // Enforcing time limit
+        if (sec === Math.round((timeLimit % 1)*100) && 
+        this.lessOrGreat[i](min, Math.floor(timeLimit))) {
+            sec = (mode === 'add') ? 0 : 59; 
+            min = this.incOrDec[i](min);
+            sec = (sec < 10) ? '0' + sec : sec;
+        } else if (this.lessOrGreat[i](min + (sec/100), timeLimit)) {
+            sec = this.incOrDec[i](sec);
+            sec = (sec < 10) ? '0' + sec : sec;
+        } else {
+            alert(message); sec = (sec === 0) ? '0' + sec : sec;
+        }
+    }
+
+    // Update corresponding state
+    if (sel === 'session') {
+        this.setState(() => ({sessionLength: min + ':' + sec}));
+    } else {
+        this.setState(() => ({breakLength: min + ':' + sec}));
+    }
+  }
+
   handleAdd() {
-    let min, sec, sel = this.state.selected;
-    
+    let min, sec, sel = this.state.selected, timerLimit;
+    timerLimit = (sel = 'session') ? timerLimit = 59: timerLimit= 29;
+
+    let {selected} = this.state;
+    console.log(selected);
+
     if (sel === 'session') {
       min = parseInt(this.state.sessionLength.split(':')[0]);
       sec = parseInt(this.state.sessionLength.split(':')[1]);
+
       
       if (this.state.unit === "min") {
         if (min < 59) {
@@ -52,6 +112,7 @@ export default class PomodoroClock extends React.Component {
     } else {
       min = parseInt(this.state.breakLength.split(':')[0]);
       sec = parseInt(this.state.breakLength.split(':')[1]);
+      timerLimit = 29;
       
       if (this.state.unit === "min") {
         if (min < 29) {
@@ -180,20 +241,16 @@ export default class PomodoroClock extends React.Component {
     }
   }
     
-  changeSelected(newSel) {
-    this.setState(() => ({ selected: newSel }));
-  }
+  changeSelected(newSel) { this.setState(() => ({ selected: newSel })); }
   
-  changeUnit(newUnit) {
-    this.setState(() => ({ unit: newUnit}));
-  }
+  changeUnit(newUnit) { this.setState(() => ({ unit: newUnit})); }
     
   startTimer() {
     if (!this.timer.countDown) {
       this.timer.defaultSession = this.state.sessionLength;
       this.timer.defaultBreak = this.state.breakLength;
       this.state.selected = 'session', this.state.unit = 'sec';
-      this.timer.countDown = setInterval(this.handleSub, 1000);
+      this.timer.countDown = setInterval(this.changeTime, 1000);
     
       document.querySelectorAll("input[type='radio']").forEach(function(el) {
         el.disabled = true;
@@ -248,8 +305,7 @@ export default class PomodoroClock extends React.Component {
         <Adjust
           unit = {this.state.unit}
           changeUnit = {this.changeUnit}
-          handleAdd = {this.handleAdd}
-          handleSub = {this.handleSub}
+          changeTime = {this.changeTime}
         />
       </div>
     );
@@ -259,7 +315,7 @@ export default class PomodoroClock extends React.Component {
 PomodoroClock.defaultProps = {
   selected: 'session',
   unit: 'min',
-  sessionLength: "0:05",
+  sessionLength: "6:05",
   breakLength: "0:05",
   countDown: null
 };
