@@ -11,6 +11,8 @@ export default class PomodoroClock extends React.Component {
     this.changeTime = this.changeTime.bind(this);
     this.changeUnit = this.changeUnit.bind(this);
     this.didTimeEnd = this.didTimeEnd.bind(this);
+    // incOrDec and lessOrGreat are used to generalize changeTime so it works 
+    // for both + and - buttons
     this.incOrDec = [
       function(num) {return num + 1;},
       function(num) {return num - 1;}
@@ -30,10 +32,34 @@ export default class PomodoroClock extends React.Component {
     };
   }
 
+  // Default values set changeTime up to decrement the timer once 'start' has 
+  // been clicked
   changeTime(mode = 'sub', limType, lim1 = 0, lim2 = 0) {
+    /* Increases or decreases the selected timer (from this.selected) based 
+    on which button was clicked (either '+' or '-' in Adjust.js component). Also
+    used to decrement the active timer when the 'start' button is clicked and
+    calls didTimeEnd() at the end in this case.
+    
+    Inputs: 
+      mode: Either 'add' or 'sub', depending on which button was clicked.
+            Affects whether the selected time will be increased or decreased, 
+            respectively. Default value is for using this function in the setInterval
+            function.
+      limType: Either 'maximum' or 'minimum', depending on which button was clicked.
+            Ensures the alert message for when the limit is enforced is correct.
+      lim1: Number corresponding to the limit for the '+' button. Depends on the 
+            values for this.state.selected and mode.
+      lim2: Number corresponding to the limit for the '-' button Depends on the 
+            values for this.state.selected and mode.
+
+    Outputs: None.
+
+     */
+
     let min, sec;
     const sel = this.state.selected;
     const timeLimit = (sel === 'session') ? lim1 : lim2;
+    // Set up correct alert message.
     const message = `The ${limType} ${sel} time is ${timeLimit}.`;
     const timeLength = (sel === 'session') ? this.state.sessionLength :
       this.state.breakLength;
@@ -74,10 +100,18 @@ export default class PomodoroClock extends React.Component {
         this.setState(() => ({breakLength: min + ':' + sec}));
     }
 
+    // Call didTimeEnd() when changeTime is being used as a timer.
     if (this.timer.countDown) {this.didTimeEnd();}
   }
 
   didTimeEnd() {
+    /* Checks if the current active timer has run out. If it has, it is hidden
+    from the user and reset to its starting time while the other timer is 
+    revealed and the user is alerted to the changing timers.
+
+    Inputs: None.
+    Outputs: None.
+    */
     let message, i;
     const activePar = document.querySelector('.active');
     const switchObj = {
@@ -88,6 +122,7 @@ export default class PomodoroClock extends React.Component {
     // Switch timer and alert user
     if (activePar.children[0].innerHTML === '0:00') {
   
+      // Find index of timer that just ended
       const pars = document.querySelectorAll('p');
       pars.forEach(function (el, index) {
         if (el === activePar) {
@@ -103,7 +138,8 @@ export default class PomodoroClock extends React.Component {
       document.querySelectorAll('p')[i].classList.add('hide');
       document.querySelectorAll('p')[i].classList.remove('active');
   
-          
+      // Return the ended timer to its initial time and switch this.state.selected
+      // so that changeTime will work with the new displayed timer.
       if (this.state.selected === 'session') {
         this.setState(() => ({
           selected: 'break',
@@ -118,6 +154,7 @@ export default class PomodoroClock extends React.Component {
         message = 'Break is over! Starting next session.';
       }
   
+      // Sound an alarm and alert the user to the change in timers.
       setTimeout(function() {
         const sound = new Howl({
           src: ['./assets/Alarm.mp3', './assets/Alarm.ogg'],
@@ -136,6 +173,12 @@ export default class PomodoroClock extends React.Component {
   changeUnit(newUnit) { this.setState(() => ({ unit: newUnit})); }
     
   startTimer() {
+    /* Begins the timer by initiating the needed parameters in this.timer,
+    disabling the radio inputs and '+' and '-' buttons, ensuring the needed
+    state properties and showing only the session timer.
+
+    Inputs and Outputs: None.
+     */
     if (!this.timer.countDown) {
       this.timer.defaultSession = this.state.sessionLength;
       this.timer.defaultBreak = this.state.breakLength;
@@ -156,6 +199,12 @@ export default class PomodoroClock extends React.Component {
   }
     
   stopTimer() {
+    /* Removes the setInterval function on this.timer, thereby stoping the timer.
+    Also enables the radio and '+' and '-' buttons, displays both of the timers
+    and ensures correct state properties.
+
+    Inputs and Outputs: None.
+     */
     if (this.countDown) {
       clearInterval(this.timer.countDown);
       delete this.timer.countDown;
