@@ -4,13 +4,13 @@ export default class Options extends React.Component {
     constructor() {
       super();
       this.changeSelected = this.changeSelected.bind(this);
-      this.state = {};
     }
     
     changeSelected(e) {
       this.props.changeSelected(e.target.id);
     }
 
+    // So the user knows that the session timer is selected by default.
     componentDidMount() {
       document.querySelector('#session').checked = true;
     }

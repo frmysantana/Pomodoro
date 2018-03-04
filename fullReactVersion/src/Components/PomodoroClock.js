@@ -5,6 +5,7 @@ import Display from './Display.js';
 import Adjust from './Adjust.js';
 
 export default class PomodoroClock extends React.Component {
+  
   constructor(props) {
     super(props);
     this.changeSelected = this.changeSelected.bind(this);
@@ -55,7 +56,7 @@ export default class PomodoroClock extends React.Component {
     Outputs: None.
 
      */
-
+    console.log('changeTime invoked.');
     let min, sec;
     const sel = this.state.selected;
     const timeLimit = (sel === 'session') ? lim1 : lim2;
@@ -179,6 +180,7 @@ export default class PomodoroClock extends React.Component {
 
     Inputs and Outputs: None.
      */
+
     if (!this.timer.countDown) {
       this.timer.defaultSession = this.state.sessionLength;
       this.timer.defaultBreak = this.state.breakLength;
@@ -205,7 +207,8 @@ export default class PomodoroClock extends React.Component {
 
     Inputs and Outputs: None.
      */
-    if (this.countDown) {
+    
+    if (!!this.timer.countDown) {
       clearInterval(this.timer.countDown);
       delete this.timer.countDown;
       

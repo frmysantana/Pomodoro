@@ -4,13 +4,14 @@ export default class Adjust extends React.Component {
     constructor() {
       super();
       this.changeUnit = this.changeUnit.bind(this);
-      this.state={};
     }
     
     changeUnit(e) {
       this.props.changeUnit(e.target.id);
     }
     
+    // So user knows that by default, they would alter the minutes portion of a 
+    // timer
     componentDidMount() {
       document.querySelector('#min').checked = true;
     }
@@ -33,8 +34,8 @@ export default class Adjust extends React.Component {
           </div>
           
           <div id="buttons">
-            <button onClick={this.props.handleAdd} className="js-adjust-time" id="add">+</button>
-            <button onClick={this.props.handleSub} className="js-adjust-time" id="sub">-</button>
+            <button onClick={this.props.changeTime} className="js-adjust-time" id="add">+</button>
+            <button onClick={this.props.changeTime} className="js-adjust-time" id="sub">-</button>
           </div>
         </div>
       );

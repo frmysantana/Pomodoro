@@ -7,6 +7,15 @@ class Display extends React.Component {
   }
 
   highlightSelected(props) {
+    /* Manages which paragraph has the selected and unselected classes
+       based on which one corresponds to the selected state value in the
+       root component.
+
+       Input: props - this component's props property, which includes the
+              state property 'selected' in the root component.
+
+       Output: None.
+     */
     let selected = props.selected;
     const paragraphs = document.querySelectorAll('p');
 
@@ -23,10 +32,12 @@ class Display extends React.Component {
     }
   }  
   
+  // To let the user know which paragraph is selected by default.
   componentDidMount() {
     this.highlightSelected(this.props);
   }
 
+  // Updates which paragraph is selected if the state value changes.
   componentDidUpdate(prevProps) {
     if (prevProps.selected !== this.props.selected) { 
       this.highlightSelected(this.props);
