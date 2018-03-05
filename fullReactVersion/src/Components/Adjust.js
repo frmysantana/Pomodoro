@@ -4,8 +4,24 @@ export default class Adjust extends React.Component {
     constructor() {
       super();
       this.changeUnit = this.changeUnit.bind(this);
+      this.changeTime = this.changeTime.bind(this);
     }
     
+
+    changeTime(e) {
+      /* Invokes the root components' changeTime function with the correct
+        parameters needed for the specific click event that activated it.
+
+        Inputs: the click event from either the '+' or '-' buttons.
+        Outputs: None.
+       */
+      if (e.target.id === 'add') {
+        this.props.changeTime('add', 'maximum', 59.59, 29.59);
+      } else {
+        this.props.changeTime('sub', 'minimum', 5.00, 1.00);
+      }
+    }
+
     changeUnit(e) {
       this.props.changeUnit(e.target.id);
     }
@@ -34,8 +50,8 @@ export default class Adjust extends React.Component {
           </div>
           
           <div id="buttons">
-            <button onClick={this.props.changeTime} className="js-adjust-time" id="add">+</button>
-            <button onClick={this.props.changeTime} className="js-adjust-time" id="sub">-</button>
+            <button onClick={this.changeTime} className="js-adjust-time" id="add">+</button>
+            <button onClick={this.changeTime} className="js-adjust-time" id="sub">-</button>
           </div>
         </div>
       );

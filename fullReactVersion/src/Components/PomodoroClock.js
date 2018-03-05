@@ -5,37 +5,30 @@ import Display from './Display.js';
 import Adjust from './Adjust.js';
 
 export default class PomodoroClock extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.changeSelected = this.changeSelected.bind(this);
-    this.changeTime = this.changeTime.bind(this);
-    this.changeUnit = this.changeUnit.bind(this);
-    this.didTimeEnd = this.didTimeEnd.bind(this);
-    // incOrDec and lessOrGreat are used to generalize changeTime so it works 
-    // for both + and - buttons
-    this.incOrDec = [
-      function(num) {return num + 1;},
-      function(num) {return num - 1;}
-    ];
-    this.lessOrGreat = [
-      function(var1, var2) {return var1 < var2;},
-      function(var1, var2) {return var1 > var2;}
-    ];  
-    this.startTimer = this.startTimer.bind(this);
-    this.stopTimer = this.stopTimer.bind(this);
-    this.timer = {};
-    this.state = {
-      selected: props.selected,
-      unit: props.unit,
-      sessionLength: props.sessionLength,
-      breakLength: props.breakLength
-    };
-  }
+  state = {
+    selected: this.props.selected,
+    unit: this.props.unit,
+    sessionLength: this.props.sessionLength,
+    breakLength: this.props.breakLength
+  };
+
+  // incOrDec and lessOrGreat are used to generalize changeTime so it works 
+  // for both + and - buttons/
+  incOrDec = [
+    function(num) {return num + 1;},
+    function(num) {return num - 1;}
+  ];
+
+  lessOrGreat = [
+    function(var1, var2) {return var1 < var2;},
+    function(var1, var2) {return var1 > var2;}
+  ];  
+
+  timer = {};
 
   // Default values set changeTime up to decrement the timer once 'start' has 
   // been clicked
-  changeTime(mode = 'sub', limType, lim1 = 0, lim2 = 0) {
+  changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0) => {
     /* Increases or decreases the selected timer (from this.selected) based 
     on which button was clicked (either '+' or '-' in Adjust.js component). Also
     used to decrement the active timer when the 'start' button is clicked and
@@ -54,9 +47,8 @@ export default class PomodoroClock extends React.Component {
             values for this.state.selected and mode.
 
     Outputs: None.
-
      */
-    console.log('changeTime invoked.');
+
     let min, sec;
     const sel = this.state.selected;
     const timeLimit = (sel === 'session') ? lim1 : lim2;
@@ -105,7 +97,7 @@ export default class PomodoroClock extends React.Component {
     if (this.timer.countDown) {this.didTimeEnd();}
   }
 
-  didTimeEnd() {
+  didTimeEnd = () => {
     /* Checks if the current active timer has run out. If it has, it is hidden
     from the user and reset to its starting time while the other timer is 
     revealed and the user is alerted to the changing timers.
@@ -169,11 +161,11 @@ export default class PomodoroClock extends React.Component {
     }
   }
     
-  changeSelected(newSel) { this.setState(() => ({ selected: newSel })); }
+  changeSelected = (newSel) => { this.setState(() => ({ selected: newSel })); }
   
-  changeUnit(newUnit) { this.setState(() => ({ unit: newUnit})); }
+  changeUnit = (newUnit) => { this.setState(() => ({ unit: newUnit})); }
     
-  startTimer() {
+  startTimer = () => {
     /* Begins the timer by initiating the needed parameters in this.timer,
     disabling the radio inputs and '+' and '-' buttons, ensuring the needed
     state properties and showing only the session timer.
@@ -184,6 +176,7 @@ export default class PomodoroClock extends React.Component {
     if (!this.timer.countDown) {
       this.timer.defaultSession = this.state.sessionLength;
       this.timer.defaultBreak = this.state.breakLength;
+      this.timer.defaultUnit = this.state.unit;
       this.state.selected = 'session', this.state.unit = 'sec';
       this.timer.countDown = setInterval(this.changeTime, 1000);
     
@@ -200,7 +193,7 @@ export default class PomodoroClock extends React.Component {
     }
   }
     
-  stopTimer() {
+  stopTimer = () => {
     /* Removes the setInterval function on this.timer, thereby stoping the timer.
     Also enables the radio and '+' and '-' buttons, displays both of the timers
     and ensures correct state properties.
@@ -226,7 +219,7 @@ export default class PomodoroClock extends React.Component {
       });
       
       this.setState(() => ({
-        selected: 'session',
+        selected: 'session', unit: this.timer.defaultUnit,
         sessionLength: this.timer.defaultSession || this.props.sessionLength,
         breakLength: this.timer.defaultBreak || this.props.breakLength
       }));
