@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should render component correctly 1`] = `
+<div
+  id="Options"
+>
+  <div>
+    <label
+      htmlFor="session"
+    >
+      Session 
+      <br />
+       Timer
+    </label>
+    <input
+      id="session"
+      name="portion"
+      onClick={[Function]}
+      type="radio"
+    />
+  </div>
+  <div>
+    <label
+      htmlFor="break"
+    >
+      Break 
+      <br />
+       Timer
+    </label>
+    <input
+      id="break"
+      name="portion"
+      onClick={[Function]}
+      type="radio"
+    />
+  </div>
+</div>
+`;

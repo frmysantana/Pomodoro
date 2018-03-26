@@ -4,9 +4,9 @@
   "description": "A web app that allows one to implement the Pomodoro method for productivity by setting up a timer to work on a task and a break timer.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev-server": "webpack-dev-server"
+    "dev-server": "webpack-dev-server",
+    "test": "jest --config=jest.config.json"
   },
   "author": "Fremy Santana",
   "license": "ISC",
@@ -27,5 +27,13 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.5.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.0.0",
+    "enzyme-to-json": "^3.0.1",
+    "jest": "^20.0.4",
+    "raf": "^3.3.2",
+    "react-test-renderer": "^16.0.0"
   }
 }

@@ -12,7 +12,10 @@ export default class Options extends React.Component {
 
     // So the user knows that the session timer is selected by default.
     componentDidMount() {
-      document.querySelector('#session').checked = true;
+      // So that this lifecycle method doesn't interfere with the Jest tests.
+      if (document.querySelector('#session')) {
+        document.querySelector('#session').checked = true;
+      }
     }
     
     render() {

@@ -1,16 +1,16 @@
 import React from 'react';
 import {Howl, Howler} from 'howler';
-import Options from './Options.js';
-import Display from './Display.js';
-import Adjust from './Adjust.js';
-import changeTime from './changeTime.js';
+import Options from './Options';
+import Display from './Display';
+import Adjust from './Adjust';
+import changeTime from '../Functions/changeTime';
 
 export default class PomodoroClock extends React.Component {
   state = {
     selected: 'session',
     unit: 'min',
-    sessionLength: "0:05",
-    breakLength: "0:05",
+    sessionLength: "0:15",
+    breakLength: "0:03",
   };
 
   timer = { countDown: null };

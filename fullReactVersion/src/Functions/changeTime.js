@@ -1,7 +1,7 @@
 import didTimeEnd from './didTimeEnd.js';
+
 // incOrDec and lessOrGreat are used to generalize changeTime so it works 
 // for both + and - buttons/
-
 let incOrDec = [
   function(num) {return num + 1;},
   function(num) {return num - 1;}
@@ -30,7 +30,8 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
         lim2: Number corresponding to the limit for the '-' button Depends on the 
             values for this.state.selected and mode.
 
-    Outputs: None.
+    Outputs: If the time change is within the limits for the operation, will return
+        the state with the corresponding timer length changed.
         */
 
     let min, sec;
@@ -44,9 +45,7 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
 
     min = parseInt(timeLength.split(':')[0]);
     sec = parseInt(timeLength.split(':')[1]);
-
-    console.log('timeLength: ' + timeLimit);
-    console.log('i: ' + i);
+    
     // Changing minutes
     if (state.unit === "min") {
         // Enforcing time limit
@@ -54,7 +53,11 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
             min = incOrDec[i](min);
             sec = (sec < 10) ? '0' + sec : sec;
         } 
-        else {alert(message); sec = (sec < 10) ? '0' + sec : sec;}
+        else {
+            if (!timer.countDown) {
+                alert(message); sec = (sec < 10) ? '0' + sec : sec;
+            }
+        }
     } 
     // Changing seconds
     else {
@@ -68,7 +71,9 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
             sec = incOrDec[i](sec);
             sec = (sec < 10) ? '0' + sec : sec;
         } else {
-            alert(message); sec = (sec === 0) ? '0' + sec : sec;
+            if (!timer.countDown) {
+                alert(message); sec = (sec === 0) ? '0' + sec : sec;
+            }
         }
     }
 
