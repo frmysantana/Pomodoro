@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should render component correctly. 1`] = `
+<div
+  id="Clock"
+>
+  <Options
+    changeSelected={[Function]}
+  />
+  <Display
+    breakLength="0:03"
+    selected="session"
+    sessionLength="0:15"
+    startTimer={[Function]}
+    stopTimer={[Function]}
+  />
+  <Adjust
+    changeTime={[Function]}
+    changeUnit={[Function]}
+    unit="min"
+  />
+</div>
+`;

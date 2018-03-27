@@ -1,14 +1,8 @@
 import React from 'react';
 
+//Used class component for the life-cycle method
 export default class Adjust extends React.Component {
-    constructor() {
-      super();
-      this.changeUnit = this.changeUnit.bind(this);
-      this.changeTime = this.changeTime.bind(this);
-    }
-    
-
-    changeTime(e) {
+    changeTime = (e) => {
       /* Invokes the root components' changeTime function with the correct
         parameters needed for the specific click event that activated it.
 
@@ -16,20 +10,24 @@ export default class Adjust extends React.Component {
         Outputs: None.
        */
       if (e.target.id === 'add') {
+        console.log()
         this.props.changeTime('add', 'maximum', 59.59, 29.59);
       } else {
         this.props.changeTime('sub', 'minimum', 5.00, 1.00);
       }
     }
 
-    changeUnit(e) {
+    changeUnit = (e) => {
       this.props.changeUnit(e.target.id);
     }
     
     // So user knows that by default, they would alter the minutes portion of a 
     // timer
     componentDidMount() {
-      document.querySelector('#min').checked = true;
+      // So that this lifecycle method doesn't interfere with the test files.
+      if (document.querySelector('#min')) {
+        document.querySelector('#min').checked = true;
+      }
     }
 
     render() {

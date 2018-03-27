@@ -1,12 +1,8 @@
 import React from 'react';
 
+//Used class component for the life-cycle method
 export default class Options extends React.Component {
-    constructor() {
-      super();
-      this.changeSelected = this.changeSelected.bind(this);
-    }
-    
-    changeSelected(e) {
+    changeSelected = (e) => {
       this.props.changeSelected(e.target.id);
     }
 

@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should render component correctly. 1`] = `
+<div
+  id="Adjust"
+>
+  <div
+    className="choice"
+  >
+    <label
+      htmlFor="minutes"
+    >
+      Minutes
+    </label>
+    <input
+      id="min"
+      name="unit"
+      onClick={[Function]}
+      type="radio"
+    />
+  </div>
+  <div
+    className="choice"
+  >
+    <label
+      htmlFor="seconds"
+    >
+      Seconds
+    </label>
+    <input
+      id="sec"
+      name="unit"
+      onClick={[Function]}
+      type="radio"
+    />
+  </div>
+  <div
+    id="buttons"
+  >
+    <button
+      className="js-adjust-time"
+      id="add"
+      onClick={[Function]}
+    >
+      +
+    </button>
+    <button
+      className="js-adjust-time"
+      id="sub"
+      onClick={[Function]}
+    >
+      -
+    </button>
+  </div>
+</div>
+`;

@@ -13,7 +13,7 @@ let lessOrGreat = [
 ];  
 
 let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
-    /* Increases or decreases the selected timer (from this.selected) based 
+    /* Increases or decreases the selected timer (from state.selected) based 
     on which button was clicked (either '+' or '-' in Adjust.js component). Also
     used to decrement the active timer when the 'start' button is clicked and
     calls didTimeEnd() at the end in this case.
@@ -26,19 +26,19 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
         limType: Either 'maximum' or 'minimum', depending on which button was clicked.
             Ensures the alert message for when the limit is enforced is correct.
         lim1: Number corresponding to the limit for the '+' button. Depends on the 
-            values for this.state.selected and mode.
+            values for state.selected and mode.
         lim2: Number corresponding to the limit for the '-' button Depends on the 
-            values for this.state.selected and mode.
+            values for state.selected and mode.
 
     Outputs: If the time change is within the limits for the operation, will return
         the state with the corresponding timer length changed.
-        */
+    */
 
     let min, sec;
     const sel = state.selected;
     const timeLimit = (sel === 'session') ? lim1 : lim2;
     // Set up correct alert message.
-    const message = `The ${limType} ${sel} time is ${timeLimit}.`;
+    const message = `The ${limType} ${sel} time is ${timeLimit}.`.replace(/\.(?=\d)/, ':');
     const timeLength = (sel === 'session') ? state.sessionLength :
         state.breakLength;
     const i = (mode === 'add') ? 0 : 1;

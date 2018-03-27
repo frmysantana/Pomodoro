@@ -1,12 +1,8 @@
 import React from 'react';
 
+//Used class component for the life-cycle methods
 class Display extends React.Component {
-  constructor() {
-    super();
-    this.highlightSelected = this.highlightSelected.bind(this);
-  }
-
-  highlightSelected(props) {
+  highlightSelected = (props) => {
     /* Manages which paragraph has the selected and unselected classes
        based on which one corresponds to the selected state value in the
        root component.
@@ -24,7 +20,8 @@ class Display extends React.Component {
       paragraphs[0].classList.remove('unselected');
       paragraphs[1].classList.add('unselected');
       paragraphs[1].classList.remove('selected');
-    } else {
+    } else if (selected === 'break') {// made into else-if so that the lifecycle
+                                      // method doesn't interfere with testing
       paragraphs[0].classList.remove('selected');
       paragraphs[0].classList.add('unselected');
       paragraphs[1].classList.remove('unselected');
