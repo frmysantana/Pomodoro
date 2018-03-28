@@ -9,8 +9,8 @@ export default class PomodoroClock extends React.Component {
   state = {
     selected: 'session',
     unit: 'min',
-    sessionLength: "0:15",
-    breakLength: "0:03",
+    sessionLength: "30:00",
+    breakLength: "5:00",
   };
 
   timer = { countDown: null };
@@ -91,23 +91,23 @@ export default class PomodoroClock extends React.Component {
     
   render() {
     return (
-      <div id="Clock">
-        <Options 
-          changeSelected = {this.changeSelected}
-        />
-        <Display
-          selected = {this.state.selected}
-          sessionLength = {this.state.sessionLength}
-          breakLength = {this.state.breakLength}
-          startTimer = {this.startTimer}
-          stopTimer = {this.stopTimer}
-        />
-        <Adjust
-          unit = {this.state.unit}
-          changeUnit = {this.changeUnit}
-          changeTime = {this.changeTime}
-        />
-      </div>
+        <div id="Clock">
+          <Options 
+            changeSelected = {this.changeSelected}
+          />
+          <Display
+            selected = {this.state.selected}
+            sessionLength = {this.state.sessionLength}
+            breakLength = {this.state.breakLength}
+            startTimer = {this.startTimer}
+            stopTimer = {this.stopTimer}
+          />
+          <Adjust
+            unit = {this.state.unit}
+            changeUnit = {this.changeUnit}
+            changeTime = {this.changeTime}
+          />
+        </div>
     );
   }
 }
