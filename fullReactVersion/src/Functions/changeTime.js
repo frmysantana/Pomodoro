@@ -72,7 +72,7 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
             sec = (sec < 10) ? '0' + sec : sec;
         } else {
             if (!timer.countDown) {
-                alert(message); sec = (sec === 0) ? '0' + sec : sec;
+                alert(message); sec = (sec <= 10) ? '0' + sec : sec;
             }
         }
     }

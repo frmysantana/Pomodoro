@@ -9,13 +9,13 @@ export default class PomodoroClock extends React.Component {
   state = {
     selected: 'session',
     unit: 'min',
-    sessionLength: "0:10",
-    breakLength: "0:10",
+    sessionLength: "30:00",
+    breakLength: "5:00",
   };
 
   timer = { countDown: null };
 
-  changeTime = (mode, limType, lim1, lim2, state, timer) => {
+  changeTime = (mode, limType, lim1, lim2) => {
     let newState = changeTime(mode, limType, lim1, lim2, this.state, this.timer);
     if (this.state.selected === 'session') {
       this.setState(() => ( {sessionLength: newState.sessionLength} ));
@@ -83,9 +83,9 @@ export default class PomodoroClock extends React.Component {
       });
       
       this.setState(() => ({
-        selected: this.timer.defaultSession, unit: this.timer.defaultUnit,
-        sessionLength: this.timer.defaultSession || this.props.sessionLength,
-        breakLength: this.timer.defaultBreak || this.props.breakLength
+        selected: this.timer.defaultSelected, unit: this.timer.defaultUnit,
+        sessionLength: this.timer.defaultSession,
+        breakLength: this.timer.defaultBreak
       }));
     }
   }

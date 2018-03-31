@@ -13,7 +13,7 @@ export default class Adjust extends React.Component {
         console.log()
         this.props.changeTime('add', 'maximum', 59.59, 29.59);
       } else {
-        this.props.changeTime('sub', 'minimum', 5.00, 1.00);
+        this.props.changeTime('sub', 'minimum', 0.10, 0.05);
       }
     }
 
