@@ -1,5 +1,5 @@
 import React from 'react';
-import {Howl, Howler} from 'howler';
+import { Howl, Howler } from 'howler';
 import Options from './Options';
 import Display from './Display';
 import Adjust from './Adjust';

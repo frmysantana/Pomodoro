@@ -1,4 +1,5 @@
 import didTimeEnd from './didTimeEnd.js';
+import numeral from 'numeral';
 
 // incOrDec and lessOrGreat are used to generalize changeTime so it works 
 // for both + and - buttons/
@@ -8,8 +9,8 @@ let incOrDec = [
 ];
 
 let lessOrGreat = [
-  function(var1, var2) {return var1 < var2;},
-  function(var1, var2) {return var1 > var2;}
+  function(var1, var2) {return var1 <= var2;},
+  function(var1, var2) {return var1 >= var2;}
 ];  
 
 let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
@@ -36,7 +37,8 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
 
     let min, sec;
     const sel = state.selected;
-    const timeLimit = (sel === 'session') ? lim1 : lim2;
+    let timeLimit = (sel === 'session') ? lim1 : lim2;
+    timeLimit = numeral(timeLimit).format('0.00');
     // Set up correct alert message.
     const message = `The ${limType} ${sel} time is ${timeLimit}.`.replace(/\.(?=\d)/, ':');
     const timeLength = (sel === 'session') ? state.sessionLength :
@@ -49,7 +51,12 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
     // Changing minutes
     if (state.unit === "min") {
         // Enforcing time limit
-        if (lessOrGreat[i](min, Math.floor(timeLimit))) {
+        const limitCheck = mode === 'add' ? ((min + 1) + sec/100) :
+          ((min - 1) + sec/100);
+        if (
+            lessOrGreat[i](limitCheck, timeLimit)
+            // lessOrGreat[i](min, Math.floor(timeLimit))
+        ) {
             min = incOrDec[i](min);
             sec = (sec < 10) ? '0' + sec : sec;
         } 
@@ -61,18 +68,26 @@ let changeTime = (mode = 'sub', limType, lim1 = 0, lim2 = 0, state, timer) => {
     } 
     // Changing seconds
     else {
+        const secondCheck = mode === 'add' ? 59 : 0;
+        const limitCheck = mode === 'add' ? (min + ((sec + 1)/100)) :
+          (min + ((sec - 1)/100));
         // Enforcing time limit
-        if (sec === Math.round((timeLimit % 1)*100) && 
-        lessOrGreat[i](min, Math.floor(timeLimit))) {
+        if (
+          sec === secondCheck && 
+          lessOrGreat[i](limitCheck, timeLimit)
+        //   lessOrGreat[i](min, Math.floor(timeLimit))
+        ) {
+            console.log('new minute');
             sec = (mode === 'add') ? 0 : 59; 
             min = incOrDec[i](min);
             sec = (sec < 10) ? '0' + sec : sec;
-        } else if (lessOrGreat[i](min + (sec/100), timeLimit)) {
+        } else if (lessOrGreat[i](limitCheck, timeLimit)) {
+            console.log('new second');
             sec = incOrDec[i](sec);
             sec = (sec < 10) ? '0' + sec : sec;
         } else {
             if (!timer.countDown) {
-                alert(message); sec = (sec <= 10) ? '0' + sec : sec;
+                alert(message); sec = (sec < 10) ? '0' + sec : sec;
             }
         }
     }
