@@ -8,9 +8,9 @@ exports[`Should render component correctly. 1`] = `
     changeSelected={[Function]}
   />
   <Display
-    breakLength="5:00"
+    breakLength="0:05"
     selected="session"
-    sessionLength="30:00"
+    sessionLength="0:10"
     startTimer={[Function]}
     stopTimer={[Function]}
   />

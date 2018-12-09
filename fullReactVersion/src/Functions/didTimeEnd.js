@@ -1,3 +1,5 @@
+import { Howl, Howler } from 'howler';
+
 let didTimeEnd = (state, timer) => {
     /* Checks if the current active timer has run out. If it has, it is hidden
     from the user and reset to its starting time while the other timer is 
